@@ -7,11 +7,20 @@ const api = supertest(app)
 
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+var token = ''
 
 describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
+
+    const login = {
+      username: 'user',
+      password: 'user',
+    }
+
+    let responseToken = await api.post('/api/login').send(login)
+    token = `Bearer ${JSON.parse(responseToken.text).token}`
   })
 
   describe('blogs are returned correctly'), () => {
@@ -27,7 +36,7 @@ describe('when there is initially some blogs saved', () => {
   }
 
   describe('adding a specific blog'), () => {
-    test('a valid blog can be added ', async () => {
+    test('a valid blog can be added', async () => {
       const newBlog = {
         title: 'Full Stack Open is really helpful',
         author: 'Nuno Araújo',
@@ -38,6 +47,7 @@ describe('when there is initially some blogs saved', () => {
       await api
         .post('/api/blogs')
         .send(newBlog)
+        .set({ Authorization: token })
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -60,6 +70,7 @@ describe('when there is initially some blogs saved', () => {
       const response = await api
         .post('/api/blogs')
         .send(newBlog)
+        .set({ Authorization: token })
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -72,7 +83,7 @@ describe('when there is initially some blogs saved', () => {
         likes: 2,
       }
 
-      await api.post('/api/blogs').send(newBlog).expect(400)
+      await api.post('/api/blogs').send(newBlog).set({ Authorization: token }).expect(400)
       const response = await api.get('/api/blogs')
       assert.strictEqual(response.body.length, helper.initialBlogs.length)
     })
@@ -82,7 +93,7 @@ describe('when there is initially some blogs saved', () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+    await api.delete(`/api/blogs/${blogToDelete.id}`).set({ Authorization: token }).expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
 
@@ -100,6 +111,7 @@ describe('when there is initially some blogs saved', () => {
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
       .send(blogToUpdate)
+      .set({ Authorization: token })
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -110,6 +122,24 @@ describe('when there is initially some blogs saved', () => {
     assert.strictEqual(response.body.length, helper.initialBlogs.length)
 
     assert(title.includes('Full Stack Open is really helpful'))
+  })
+
+  test('adding blog fails if a token is not provided', async () => {
+    const newBlog = {
+      title: 'Full Stack Open is really helpful',
+      author: 'Nuno Araújo',
+      url: 'https://github.com/hotnunstar/fullstackopen',
+      likes: 2,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    assert.strictEqual(response.body.length, helper.initialBlogs.length)
   })
 })
 
