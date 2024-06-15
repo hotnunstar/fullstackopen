@@ -4,6 +4,10 @@
 
 <br>
 
+In this part, we took a look at how to render a data collection, like a list of names, to the screen. After this, we inspect how a user can submit data to a React application using HTML forms. Next, our focus shifts towards looking at how JavaScript code in the browser can fetch and handle data stored in a remote backend server. Lastly, we took a quick look at a few simple ways of adding CSS styles to our React applications.
+
+<br>
+
 :mag_right: More information about the course can be found at [fullstackopen.com](https://fullstackopen.com/) 👈
 
 ---
