@@ -4,6 +4,10 @@
 
 <br>
 
+In this part, we familiarize ourselves with the React-library, which we was used to write the code that runs in the browser. We also look at some features of JavaScript that are important for understanding React.
+
+<br>
+
 :mag_right: More information about the course can be found at [fullstackopen.com](https://fullstackopen.com/) 👈
 
 ---
