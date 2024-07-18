@@ -29,4 +29,32 @@ const create = async (newObject) => {
   }
 }
 
-export default { getAll, create, setToken }
+const update = async (existentObject) => {
+  const url = `${baseUrl}/${existentObject.id}`
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  try {
+    const response = await axios.put(url, existentObject, config)
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to update blog')
+  }
+}
+
+const remove = async (existentObject) => {
+  const url = `${baseUrl}/${existentObject.id}`
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  try {
+    const response = await axios.delete(url, config)
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to delete blog')
+  }
+}
+
+export default { setToken, getAll, create, update, remove }

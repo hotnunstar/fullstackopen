@@ -1,57 +1,48 @@
 import { useState } from 'react';
 
 const BlogForm = ({ createBlog }) => {
-    const [blogTitle, setBlogTitle] = useState('');
-    const [blogAuthor, setBlogAuthor] = useState('');
-    const [blogUrl, setBlogUrl] = useState('');
+  const [newBlog, setNewBlog] = useState({
+    title: '',
+    author: '',
+    url: ''
+  });
 
-    const handleCreateBlog = (event) => {
-        event.preventDefault();
-        createBlog({
-            title: blogTitle,
-            author: blogAuthor,
-            url: blogUrl,
-        });
-        setBlogTitle('');
-        setBlogAuthor('');
-        setBlogUrl('');
-    };
+  const addBlog = (event) => {
+    event.preventDefault();
+    createBlog(newBlog);
+    setNewBlog({
+      title: '',
+      author: '',
+      url: ''
+    });
+  };
 
-    return (
-        <div>
-            <h3>Create new</h3>
-            <form onSubmit={handleCreateBlog}>
-                <div>
-                    title
-                    <input
-                        type="text"
-                        value={blogTitle}
-                        name="blogTitle"
-                        onChange={({ target }) => setBlogTitle(target.value)}
-                    />
-                </div>
-                <div>
-                    author
-                    <input
-                        type="text"
-                        value={blogAuthor}
-                        name="blogAuthor"
-                        onChange={({ target }) => setBlogAuthor(target.value)}
-                    />
-                </div>
-                <div>
-                    url
-                    <input
-                        type="url"
-                        value={blogUrl}
-                        name="blogUrl"
-                        onChange={({ target }) => setBlogUrl(target.value)}
-                    />
-                </div>
-                <button type="submit">Create</button>
-            </form>
-        </div>
-    );
+  return (
+    <div>
+      <h3>Create new Blog</h3>
+      <form onSubmit={addBlog}>
+        {Object.keys(newBlog).map((field) => (
+          <div key={field}>
+            <label htmlFor={field}>{field}</label>
+            <input
+              type={field === 'url' ? 'url' : 'text'}
+              id={field}
+              name={field}
+              value={newBlog[field]}
+              onChange={(event) => {
+                const { name, value } = event.target;
+                setNewBlog(prevState => ({
+                  ...prevState,
+                  [name]: value
+                }));
+              }}
+            />
+          </div>
+        ))}
+        <button type="submit">Create</button>
+      </form>
+    </div>
+  );
 };
 
 export default BlogForm;
