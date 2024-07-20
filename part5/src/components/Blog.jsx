@@ -17,7 +17,7 @@ const Blog = ({ blog, user, updateBlog, removeBlog }) => {
 
   return (
     <div style={blogStyle}>
-      <div style={blogTitleStyle}>
+      <div style={blogTitleStyle} className="blog">
         {blog.title}
         <button onClick={() => setShowInfo(!showInfo)}>
           {showInfo ? 'Hide Info' : 'View Info'}
