@@ -4,6 +4,10 @@
 
 <br>
 
+⚠️ <b>Note: </b> Due to personal and professional needs, from part 6 onward, the backend of the applications started being developed in C#
+
+<br>
+
 This course is divided into the following parts: 
 
 ✔️ Part 0 - Fundamentals of Web apps  
