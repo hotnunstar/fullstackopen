@@ -8,6 +8,7 @@ import UserList from './components/user/UserList'
 import UserInfo from './components/user/UserInfo'
 import BlogForm from './components/blog/BlogForm'
 import BlogList from './components/blog/BlogList'
+import BlogInfo from './components/blog/BlogInfo'
 import { handleLogout, login } from './reducers/authReducer'
 
 import blogService from './services/blogs'
@@ -46,6 +47,7 @@ const App = () => {
           <UserList />
           <Routes>
             <Route path="/users/:id" element={<UserInfo />} />
+            <Route path="/blogs/:id" element={<BlogInfo />} />
           </Routes>
           <BlogForm />
           <BlogList user={user} />
