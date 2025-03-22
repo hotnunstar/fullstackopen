@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Routes, Route } from 'react-router-dom'
 
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
-import UserList from './components/UsersList'
-import BlogForm from './components/Blog/BlogForm'
-import BlogList from './components/Blog/BlogList'
+import UserList from './components/user/UserList'
+import UserInfo from './components/user/UserInfo'
+import BlogForm from './components/blog/BlogForm'
+import BlogList from './components/blog/BlogList'
 import { handleLogout, login } from './reducers/authReducer'
 
 import blogService from './services/blogs'
@@ -20,10 +22,15 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       dispatch(login(user))
+    }
+  }, [dispatch])
+
+  useEffect(() => {
+    if (user && user.token) {
       blogService.setToken(user.token)
       userService.setToken(user.token)
     }
-  }, [dispatch])
+  }, [user])
 
   return (
     <div>
@@ -37,6 +44,9 @@ const App = () => {
             <button onClick={() => dispatch(handleLogout())}>Logout</button>
           </p>
           <UserList />
+          <Routes>
+            <Route path="/users/:id" element={<UserInfo />} />
+          </Routes>
           <BlogForm />
           <BlogList user={user} />
         </div>
