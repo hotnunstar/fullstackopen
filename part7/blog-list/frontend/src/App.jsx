@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
@@ -35,22 +35,28 @@ const App = () => {
 
   return (
     <div>
-      <Notification />
       {user === null ? (
         <LoginForm />
       ) : (
         <div>
-          <p>
-            {user.name} logged-in{' '}
-            <button onClick={() => dispatch(handleLogout())}>Logout</button>
-          </p>
-          <UserList />
+          <Notification />
+          <div>
+            <Link to="/blogs">Blogs</Link>
+            <Link to="/users">Users</Link>
+            <p>
+              {user.name} logged-in{' '}
+              <button onClick={() => dispatch(handleLogout())}>Logout</button>
+            </p>
+          </div>
+
           <Routes>
+            <Route path="/" element={<BlogList user={user} />} />
+            <Route path="/users" element={<UserList />} />
+            <Route path="/blogs" element={<BlogList user={user} />} />
+            <Route path="/blogs/new" element={<BlogForm />} />
             <Route path="/users/:id" element={<UserInfo />} />
             <Route path="/blogs/:id" element={<BlogInfo />} />
           </Routes>
-          <BlogForm />
-          <BlogList user={user} />
         </div>
       )}
     </div>

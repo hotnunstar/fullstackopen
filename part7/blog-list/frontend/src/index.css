@@ -1,5 +1,9 @@
 .error,
 .success {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: fit-content;
   background: lightgrey;
   font-size: 20px;
   border-style: solid;

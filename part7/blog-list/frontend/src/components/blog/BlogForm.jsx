@@ -1,9 +1,11 @@
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { createBlog } from '../../reducers/blogReducer'
 import { showNotification } from '../../reducers/notificationReducer'
 
 const BlogForm = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const [formFields, setFormFields] = useState({
     title: '',
@@ -29,6 +31,7 @@ const BlogForm = () => {
 
     dispatch(createBlog(formFields))
     setFormFields({ title: '', author: '', url: '' })
+    navigate('/blogs')
   }
 
   return (

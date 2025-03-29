@@ -6,7 +6,7 @@ import userService from '../services/users'
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: [],
+  initialState: null,
   reducers: {
     login(state, action) {
       return action.payload

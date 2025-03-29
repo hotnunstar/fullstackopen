@@ -31,6 +31,7 @@ const BlogList = () => {
   return (
     <div>
       <h3>Blogs</h3>
+      <Link to="/blogs/new">Create blog</Link>
       {[...blogs]
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
