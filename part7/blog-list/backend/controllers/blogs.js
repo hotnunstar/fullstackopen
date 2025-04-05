@@ -1,12 +1,17 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const Comment = require('../models/comment')
 const middleware = require('../utils/middleware')
 
+// Get all blogs
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({})
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { comment: 1 })
   response.json(blogs)
 })
 
+// Post blog
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   const user = request.user
   const body = request.body
@@ -32,6 +37,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   response.status(201).json(populatedBlog)
 })
 
+// Put blog
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
 
@@ -52,6 +58,7 @@ blogsRouter.put('/:id', async (request, response) => {
   response.status(201).json(populatedBlog)
 })
 
+// Delete blog
 blogsRouter.delete(
   '/:id',
   middleware.userExtractor,
@@ -66,6 +73,40 @@ blogsRouter.delete(
 
       response.status(204).end()
     } else response.status(401).json({ error: 'user invalid' })
+  }
+)
+
+// Post blog comment
+blogsRouter.post(
+  '/:id/comments',
+  middleware.userExtractor,
+  async (request, response) => {
+    const { comment } = request.body
+    const user = request.user
+    const blogId = request.params.id
+
+    if (!comment)
+      return response.status(400).json({ error: 'Comment is required' })
+
+    const blog = await Blog.findById(blogId)
+    if (!blog) return response.status(404).json({ error: 'Blog not found' })
+
+    const newComment = new Comment({
+      comment,
+      user: user.id,
+      blog: blogId,
+    })
+
+    const savedComment = await newComment.save()
+    blog.comments = blog.comments.concat(savedComment._id)
+    await blog.save()
+
+    const populatedComment = await savedComment.populate('user', {
+      username: 1,
+      name: 1,
+    })
+
+    response.status(201).json(populatedComment)
   }
 )
 

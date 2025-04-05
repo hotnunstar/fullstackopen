@@ -57,4 +57,18 @@ const remove = async (id) => {
   }
 }
 
-export default { setToken, getAll, create, update, remove }
+const createComment = async (id, comment) => {
+  const url = `${baseUrl}/${id}/comments`
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  try {
+    const response = await axios.post(url, { comment: comment }, config)
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to create comment')
+  }
+}
+
+export default { setToken, getAll, create, update, remove, createComment }
