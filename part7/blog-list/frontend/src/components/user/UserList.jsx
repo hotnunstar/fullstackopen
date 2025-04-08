@@ -28,32 +28,38 @@ const UserList = () => {
   }, [dispatch])
 
   return (
-    <div>
-      <h3>Users</h3>
+    <div className="mx-auto min-w-96 bg-lime-100 border border-lime-900 w-fit p-4 rounded-lg">
+      <h3 className="text-xl font-bold text-center text-lime-700 pb-4">
+        Users
+      </h3>
 
       {users.length > 0 ? (
-        <table>
+        <table className="table-auto w-full border border-collapse border-lime-300">
           <thead>
             <tr>
-              <th></th>
-              <th>
-                <b>blogs created</b>
+              <th className="text-start border border-lime-300 px-4 py-2">
+                Name
+              </th>
+              <th className="text-start border border-lime-300 px-4 py-2">
+                Blogs created
               </th>
             </tr>
           </thead>
           <tbody>
             {[...users].map((user) => (
               <tr key={user.id}>
-                <td>
+                <td className="border border-lime-300 px-4 py-2">
                   <Link to={`/users/${user.id}`}>{user.name}</Link>
                 </td>
-                <td>{user.blogs.length}</td>
+                <td className="border border-lime-300 px-4 py-2">
+                  {user.blogs.length}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <p>No users available</p>
+        <p className="pt-4 text-center italic">No users available</p>
       )}
     </div>
   )
