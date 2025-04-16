@@ -13,8 +13,8 @@ This course is divided into the following parts:
 ✔️ Part 4 - Testing Express servers, user administration  
 ✔️ Part 5 - Testing React apps  
 ✔️ Part 6 - Advanced state management  
-⏳ Part 7 - React router, custom hooks, styling app with CSS and webpack  
-❌ Part 8 - GraphQL  
+✔️ Part 7 - React router, custom hooks, styling app with CSS and webpack  
+⏳ Part 8 - GraphQL  
 ❌ Part 9 - TypeScript  
 ❌ Part 10 - React Native  
 ❌ Part 11 - CI/CD  
