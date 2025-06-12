@@ -1,12 +1,30 @@
 import PropTypes from 'prop-types'
-import { useQuery } from '@apollo/client'
-import { ALL_AUTHORS } from '../queries'
+import { useState, useEffect } from 'react'
+import { useMutation } from '@apollo/client'
+import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 
-const Authors = (props) => {
-  const result = useQuery(ALL_AUTHORS)
+const Authors = ({ show, authors, setError }) => {
+  const [name, setName] = useState('')
+  const [born, setBorn] = useState('')
 
-  if (!props.show) return null
-  if (result.loading) return <div>loading...</div>
+  const [changeAuthor, result] = useMutation(EDIT_AUTHOR, {
+    refetchQueries: [{ query: ALL_AUTHORS }],
+  })
+
+  const submit = (event) => {
+    event.preventDefault()
+    changeAuthor({ variables: { name, born } })
+    setName('')
+    setBorn('')
+  }
+
+  useEffect(() => {
+    if (result.data && result.data.editAuthor === null) {
+      setError('person not found')
+    }
+  }, [result.data]) // eslint-disable-line 
+
+  if (!show) return null
 
   return (
     <div>
@@ -18,8 +36,8 @@ const Authors = (props) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {result.data.allAuthors.map((a) => (
-            <tr key={a.name}>
+          {authors.map((a) => (
+            <tr key={a.id}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
@@ -27,12 +45,36 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+      <h3>Set birthyear</h3>
+      <form onSubmit={submit}>
+        <label>
+          ---- Select a author to update the birthday ----
+          <br />
+          <select value={name} onChange={({ target }) => setName(target.value)}>
+            {authors.map(a =>
+              <option value={a.name} key={a.name}>
+                {a.name}
+              </option>
+            )}
+          </select>
+        </label>
+        <div>
+          born
+          <input
+            value={born}
+            onChange={({ target }) => setBorn(target.value)}
+          />
+        </div>
+        <button type='submit'>update author</button>
+      </form>
     </div>
   )
 }
 
 Authors.propTypes = {
   show: PropTypes.bool.isRequired,
+  authors: PropTypes.array.isRequired,
+  setError: PropTypes.func.isRequired
 }
 
 export default Authors

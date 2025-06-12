@@ -1,17 +1,20 @@
 import PropTypes from 'prop-types'
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
+import { useState } from 'react'
 
-const Books = (props) => {
-  const result = useQuery(ALL_BOOKS)
+const Books = ({ show, books }) => {
+  const [filter, setFilter] = useState('all genres')
 
-  if (!props.show) return null
-  if (result.loading) return <div>loading...</div>
+  const genreDuplicateArray = books.map(b => b.genres).flat()
+  const genres = [...new Set(genreDuplicateArray)]
+  genres.push("all genres")
+
+  if (!show) return null
+  const filteredBook = books.filter(book => filter === 'all genres' ? book : book.genres.includes(filter))
 
   return (
     <div>
       <h2>books</h2>
-
+      <p>in genre <strong>{filter}</strong></p>
       <table>
         <tbody>
           <tr>
@@ -19,21 +22,27 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {result.data.allBooks.map((b) => (
-            <tr key={b.title}>
-              <td>{b.title}</td>
-              <td>{b.author}</td>
-              <td>{b.published}</td>
+          {filteredBook.map((a) => (
+            <tr key={a.title}>
+              <td>{a.title}</td>
+              <td>{a.author.name}</td>
+              <td>{a.published}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      <div>
+        {genres.map((g, index) => (
+          <button key={index} onClick={() => setFilter(g)}>{g}</button>
+        ))}
+      </div>
     </div>
   )
 }
 
 Books.propTypes = {
   show: PropTypes.bool.isRequired,
+  books: PropTypes.array.isRequired
 }
 
 export default Books

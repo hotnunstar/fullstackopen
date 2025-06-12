@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { CREATE_BOOK, ALL_BOOKS } from '../queries'
+import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
+import { updateCache } from '../App'
 
-const NewBook = (props) => {
+const NewBook = ({ show, setError }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -11,17 +12,23 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }],
+    refetchQueries: [{ query: ALL_AUTHORS }],
     onError: (error) => {
-      console.error(error.graphQLErrors.map(e => e.message).join('\n'))
-    }
+      const messages = error.graphQLErrors[0].message
+      setError(messages)
+      console.log('error', error.graphQLErrors[0].message)
+    },
+    update: (cache, response) => {
+      updateCache(cache, { query: ALL_BOOKS },
+        response.data.addBook)
+    },
   })
 
-  if (!props.show) return null
+  if (!show) return null
 
   const submit = async (event) => {
     event.preventDefault()
-    createBook({ variables: { title, published: Number(published), author, genres } })
+    createBook({ variables: { title, published, author, genres } })
 
     setTitle('')
     setPublished('')
@@ -79,6 +86,7 @@ const NewBook = (props) => {
 
 NewBook.propTypes = {
   show: PropTypes.bool.isRequired,
+  setError: PropTypes.func.isRequired
 }
 
 export default NewBook
