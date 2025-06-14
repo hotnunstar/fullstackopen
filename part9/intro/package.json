@@ -1,0 +1,36 @@
+{
+  "name": "intro",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Nuno Araújo",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts-node": "ts-node",
+    "calculateBmi": "ts-node bmiCalculator.ts",
+    "calculateExercises": "ts-node exerciseCalculator.ts",
+    "start": "ts-node index.ts",
+    "dev": "ts-node-dev index.ts",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@stylistic/eslint-plugin": "^4.4.1",
+    "@types/eslint__js": "^8.42.3",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^29.5.14",
+    "@types/lodash": "^4.17.17",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^24.0.1",
+    "@types/react": "^19.1.8",
+    "eslint": "^9.29.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.0"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
