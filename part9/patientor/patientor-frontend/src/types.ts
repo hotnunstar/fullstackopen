@@ -64,4 +64,13 @@ export interface Patient {
 }
 
 export type PatientFormValues = Omit<Patient, 'id' | 'entries'>;
+
 export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
+
+export const EntryTypeValues = ['HealthCheck', 'Hospital', 'OccupationalHealthcare'] as const;
+
+export type EntryType = typeof EntryTypeValues[number];
+
+type OmitId<T> = Omit<T, 'id'>;
+
+export type EntryFormValues = OmitId<HealthCheckEntry> | OmitId<HospitalEntry> | OmitId<OccupationalHealthcareEntry>;

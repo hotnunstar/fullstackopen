@@ -54,8 +54,6 @@ interface HospitalEntry extends BaseEntry {
 	discharge: Discharge;
 }
 
-export type Entry = BaseEntry | HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
-
 export interface Patient {
 	id: string;
 	name: string;
@@ -63,11 +61,15 @@ export interface Patient {
 	occupation: string;
 	gender: Gender;
 	dateOfBirth: string;
-	entries: Entry[];
+	entries: PatientEntry[];
 }
 
 export type NewPatient = z.infer<typeof NewPatientSchema>;
 
 export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
 
+export type PatientEntry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
+
 export type NewPatientEntry = z.infer<typeof NewPatientEntrySchema>;
+
+export type ErrorResponse = { error: string };
